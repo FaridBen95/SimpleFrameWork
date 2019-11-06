@@ -16,7 +16,6 @@ public class SQLUtil {
         sql.append(" (");
         List<Col> columns = model.getColumns();
         sql.append(generateColumnStatement(columns));
-        sql.deleteCharAt(sql.lastIndexOf(","));
         sql.append(")");
         sqlCreateStatement.put(model.getModelName(), sql.toString());
     }
@@ -37,10 +36,10 @@ public class SQLUtil {
                 colStatement.append(" AUTOINCREMENT ");
             }
             Object default_value = col.getDefaultValue();
-            if (default_value != null) {
+            if (default_value != null && !default_value.toString().equals("")) {
                 colStatement.append(" DEFAULT ");
                 if (default_value instanceof String) {
-                    colStatement.append("'" + default_value + "'");
+                    colStatement.append("'").append(default_value).append("'");
                 } else {
                     colStatement.append(default_value);
                 }

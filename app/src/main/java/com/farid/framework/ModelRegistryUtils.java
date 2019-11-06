@@ -36,7 +36,7 @@ public class ModelRegistryUtils {
     private String getModelName(Context context, Class cls) {
         try {
             Constructor constructor = cls.getConstructor(Context.class );
-            Model model = (Model) constructor.newInstance(context, null);
+            Model model = (Model) constructor.newInstance(context);
             return model.getModelName();
         } catch (Exception e) {
             e.printStackTrace();

@@ -8,6 +8,7 @@ import java.util.HashMap;
 import java.util.List;
 
 public class App extends Application {
+    public static boolean create = false;
     private static HashMap<String, MySqlite> sqlites = new HashMap<>();
     private static ModelRegistryUtils modelRegistryUtils = new ModelRegistryUtils();
 
@@ -47,5 +48,6 @@ public class App extends Application {
         super.onCreate();
         SQLitesListSingleton.getSQLiteList().sqlites = sqlites;
         modelRegistryUtils.makeReady(getApplicationContext());
+        create = true;
     }
 }

@@ -27,15 +27,15 @@ public class Model {
     private List<Field> fields;
 
     public Model(Context mContext, String modelName){
-        this(mContext, modelName, null);
+        this(mContext, modelName, null, App.create);
     }
 
-    public Model(Context mContext, String modelName, DatabaseErrorHandler databaseErrorHandler){
+    public Model(Context mContext, String modelName, DatabaseErrorHandler databaseErrorHandler, boolean create){
         this.mContext = mContext;
         this.modelName = modelName;
         this.caller = MyUtil.caller();
         sqlite = SQLitesListSingleton.getSQLiteList().sqlites.get(modelName);
-        if(sqlite == null){
+        if(sqlite == null && create){
             createTable(databaseErrorHandler);
         }
         App.addSQLite(modelName, sqlite);
@@ -44,28 +44,43 @@ public class Model {
 
     private void createTable(DatabaseErrorHandler databaseErrorHandler) {
         sqlite = new MySqlite(mContext, databaseErrorHandler);
-
+        sqlite.getWritableDatabase();
     }
 
     private void initColumns(){
-        this.fields = new ArrayList<>();
-        List<Field> fields = new ArrayList<>();
-        fields.addAll(Arrays.asList(getClass().getSuperclass().getDeclaredFields()));
-        fields.addAll(Arrays.asList(getClass().getDeclaredFields()));
-        for (Field field : fields) {
-            if (field.getType().isAssignableFrom(Col.class)) {
-                this.fields.add(field);
+        try {this.fields = new ArrayList<>();
+            List<Field> fields = new ArrayList<>();
+            fields.addAll(Arrays.asList(getClass().getSuperclass().getDeclaredFields()));
+            fields.addAll(Arrays.asList(getClass().getDeclaredFields()));
+            for (Field field : fields) {
+                if (field.getType().isAssignableFrom(Col.class)) {
+                    Col col = (Col) field.get(this);
+                    col.setName(field.getName());
+                    this.fields.add(field);
+                }
             }
+        } catch (IllegalAccessException e) {
+            e.printStackTrace();
         }
     }
 
     public List<Col> getColumns(){
+        initColumns();
         List<Col> columns = new ArrayList<>();
         Col col = new Col();
         for(Field field : fields){
-            columns.add(col.getColumn(field));
+            columns.add(getColumn(field));
         }
         return columns;
     }
 
+
+    public Col getColumn(Field field){
+        try {
+            return (Col) field.get(this);
+        } catch (IllegalAccessException e) {
+            e.printStackTrace();
+        }
+        return null;
+    }
 }

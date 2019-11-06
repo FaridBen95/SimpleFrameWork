@@ -52,6 +52,7 @@ class MySqlite extends SQLiteOpenHelper{
 
     @Override
     public void onCreate(final SQLiteDatabase db) {
+        App.create = false;
         Log.i(TAG, "Creating database.");
         ModelRegistryUtils registryUtils = App.getModelRegistryUtils();
         HashMap<String, Class<? extends Model>> models = registryUtils.getModels();
@@ -62,17 +63,7 @@ class MySqlite extends SQLiteOpenHelper{
         HashMap<String, String> sqlCreateStatement = SQLUtil.getSqlCreateStatement();
         for(String modelName : sqlCreateStatement.keySet()){
             final String createQuery = sqlCreateStatement.get(modelName);
-            SQLUtil.startTransaction(this, new DatabaseObserver() {
-                @Override
-                public boolean onStartedTransaction() {
-                    try {
-                        db.execSQL(createQuery);
-                    }catch (SQLException s){
-                        return false;
-                    }
-                    return true;
-                }
-            });
+            db.execSQL(createQuery);
         }
         Log.i(TAG, "Tables Created ");
 

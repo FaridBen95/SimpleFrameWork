@@ -15,6 +15,7 @@ public class Col {
     private Object defaultValue;
 
     public Col(){
+        this(ColumnType.text);
     }
 
     public Col(ColumnType columnType){
