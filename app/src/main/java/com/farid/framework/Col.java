@@ -3,6 +3,12 @@ package com.farid.framework;
 import java.lang.reflect.Field;
 
 public class Col {
+    public static String ID = "id";
+    public static String WRITE_DATE = "write_date";
+    public static String ENABLED = "enabled";
+    public static String REMOVED = "removed";
+
+
     private String currentModel;
     public enum ColumnType {
         varchar, text, integer, real, bool, relation
@@ -13,6 +19,17 @@ public class Col {
     private Class relationalModel;
     private boolean autoIncrement;
     private Object defaultValue;
+    private int sequence;
+
+    public int getSequence() {
+        return sequence;
+    }
+
+    public Col setSequence(int sequence) {
+        this.sequence = sequence;
+        return this;
+    }
+
 
     public Col(){
         this(ColumnType.text);
@@ -118,7 +135,8 @@ public class Col {
         return autoIncrement;
     }
 
-    public void setAutoIncrement(boolean autoIncrement) {
+    public Col setAutoIncrement(boolean autoIncrement) {
         this.autoIncrement = autoIncrement;
+        return this;
     }
 }

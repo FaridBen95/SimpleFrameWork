@@ -11,4 +11,9 @@ public class example extends Model {
     public example(Context mContext ) {
         super(mContext, "example");
     }
+
+    @Override
+    public boolean sortableColumns() {
+        return false;
+    }
 }

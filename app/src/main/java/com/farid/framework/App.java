@@ -2,6 +2,7 @@ package com.farid.framework;
 
 import android.app.Application;
 import android.content.Context;
+import android.database.sqlite.SQLiteDatabase;
 
 import java.lang.reflect.Constructor;
 import java.util.HashMap;
@@ -49,5 +50,10 @@ public class App extends Application {
         SQLitesListSingleton.getSQLiteList().sqlites = sqlites;
         modelRegistryUtils.makeReady(getApplicationContext());
         create = true;
+    }
+
+    public static SQLiteDatabase getDB( String modelName, boolean writableDatabase){
+        return writableDatabase ? sqlites.get(modelName).getWritableDatabase() :
+                sqlites.get(modelName).getReadableDatabase();
     }
 }

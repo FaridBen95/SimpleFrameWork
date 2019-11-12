@@ -1,28 +1,34 @@
 package com.farid.framework;
 
 import android.content.Context;
+import android.database.Cursor;
 import android.database.DatabaseErrorHandler;
+import android.database.sqlite.SQLiteDatabase;
+import android.net.Uri;
 import android.view.Display;
 
 import java.lang.reflect.Field;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import java.util.Locale;
 
-public class Model {
+public class Model implements DatabaseListener{
     private Context mContext;
     private String modelName;
     private String caller;
     protected MySqlite sqlite;
+    private static String BASE_AUTHORITY = BuildConfig.APPLICATION_ID + ".main_provider";
 
 
     public String getModelName() {
         return modelName;
     }
 
-    Col id = new Col(Col.ColumnType.integer);
-    Col enabled = new Col(Col.ColumnType.bool);
-    Col removed = new Col(Col.ColumnType.bool);
+    public Col id = new Col(Col.ColumnType.integer).setAutoIncrement(true).setSequence(-3);
+    public Col enabled = new Col(Col.ColumnType.bool).setSequence(-2);
+    public Col write_date = new Col(Col.ColumnType.text).setSequence(-1);
+    public Col removed = new Col(Col.ColumnType.bool).setSequence(0);
 
     private List<Field> fields;
 
@@ -42,6 +48,12 @@ public class Model {
 //        initColumns();
     }
 
+    public Uri createUri(String authority){
+        BASE_AUTHORITY = authority;
+        String path = getModelName().toLowerCase(Locale.getDefault());
+        return MyBaseProvider.buildURI(BASE_AUTHORITY, path);
+    }
+
     private void createTable(DatabaseErrorHandler databaseErrorHandler) {
         sqlite = new MySqlite(mContext, databaseErrorHandler);
         sqlite.getWritableDatabase();
@@ -50,7 +62,12 @@ public class Model {
     private void initColumns(){
         try {this.fields = new ArrayList<>();
             List<Field> fields = new ArrayList<>();
-            fields.addAll(Arrays.asList(getClass().getSuperclass().getDeclaredFields()));
+            boolean unassignFromModel = unAssigneFromModel();
+            if(!unassignFromModel) {
+                fields.addAll(Arrays.asList(getClass().getSuperclass().getDeclaredFields()));
+            }else{
+                fields.add(getClass().getSuperclass().getField("id"));
+            }
             fields.addAll(Arrays.asList(getClass().getDeclaredFields()));
             for (Field field : fields) {
                 if (field.getType().isAssignableFrom(Col.class)) {
@@ -59,7 +76,7 @@ public class Model {
                     this.fields.add(field);
                 }
             }
-        } catch (IllegalAccessException e) {
+        } catch (IllegalAccessException | NoSuchFieldException e) {
             e.printStackTrace();
         }
     }
@@ -82,5 +99,31 @@ public class Model {
             e.printStackTrace();
         }
         return null;
+    }
+
+    public SQLiteDatabase getReadableDatabase(){
+        return App.getDB(this.modelName, false);
+    }
+
+    public SQLiteDatabase getWritableDatabase(){
+        return App.getDB(this.modelName, true);
+    }
+
+    public void startTransaction(DatabaseObserver databaseObserver){
+        SQLUtil.startTransaction(getWritableDatabase(), databaseObserver);
+    }
+
+    @Override
+    public boolean unAssigneFromModel() {
+        return false;
+    }
+
+    @Override
+    public boolean sortableColumns() {
+        return true;
+    }
+
+    public Cursor simpleSelect(){
+        return mContext.getContentResolver().query(createUri(BASE_AUTHORITY), null, "", null, "");
     }
 }
