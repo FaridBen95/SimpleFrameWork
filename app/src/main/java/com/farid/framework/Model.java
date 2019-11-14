@@ -1,15 +1,18 @@
 package com.farid.framework;
 
+import android.content.ContentValues;
 import android.content.Context;
 import android.database.Cursor;
 import android.database.DatabaseErrorHandler;
 import android.database.sqlite.SQLiteDatabase;
 import android.net.Uri;
+import android.renderscript.Sampler;
 import android.view.Display;
 
 import java.lang.reflect.Field;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Locale;
 
@@ -49,9 +52,13 @@ public class Model implements DatabaseListener{
     }
 
     public Uri createUri(String authority){
+        return createUri(authority, false);
+    }
+
+    public Uri createUri(String authority, boolean multi){
         BASE_AUTHORITY = authority;
         String path = getModelName().toLowerCase(Locale.getDefault());
-        return MyBaseProvider.buildURI(BASE_AUTHORITY, path);
+        return MyBaseProvider.buildURI(BASE_AUTHORITY, path, multi);
     }
 
     private void createTable(DatabaseErrorHandler databaseErrorHandler) {
@@ -125,5 +132,9 @@ public class Model implements DatabaseListener{
 
     public Cursor simpleSelect(){
         return mContext.getContentResolver().query(createUri(BASE_AUTHORITY), null, "", null, "");
+    }
+
+    public void insert(Values values, boolean multi){
+        mContext.getContentResolver().insert(createUri(BASE_AUTHORITY, multi), values.toContentValues());
     }
 }

@@ -4,6 +4,7 @@ import android.content.ContentProvider;
 import android.content.ContentValues;
 import android.content.Context;
 import android.database.Cursor;
+import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteQueryBuilder;
 import android.net.Uri;
 import android.support.annotation.NonNull;
@@ -14,6 +15,8 @@ import java.util.List;
 
 public class MyBaseProvider extends ContentProvider {
     public final static String KEY_MODEL = "key_model";
+    public final static String KEY_TYPE = "single";
+    private static boolean multi = false;
     private Model model;
     private Context context;
 
@@ -61,6 +64,9 @@ public class MyBaseProvider extends ContentProvider {
 
     private Model getModel(Uri uri) {
         String modelName = uri.getQueryParameter(KEY_MODEL);
+        String type = uri.getQueryParameter(KEY_TYPE);
+        assert type != null;
+        multi = type.equals("multi");
         return App.getModel(context, modelName);
     }
 
@@ -73,7 +79,24 @@ public class MyBaseProvider extends ContentProvider {
     @Nullable
     @Override
     public Uri insert(@NonNull Uri uri, @Nullable ContentValues values) {
-        return null;
+        context = getContext();
+        model = getModel(uri);
+        ContentValues validatedValues = validateValues(values);
+        SQLiteDatabase db = model.getWritableDatabase();
+        long new_id = db.insert(model.getModelName(), null, validatedValues);
+        return Uri.withAppendedPath(uri, new_id + "");
+    }
+
+    private ContentValues validateValues(ContentValues values) {
+        ContentValues contentValues = values;
+        if(!model.unAssigneFromModel()){
+            if(!values.containsKey("enabled")){
+                contentValues.put("enabled", true);
+                contentValues.put("removed", false);
+                contentValues.put("write_date", MyUtil.getCurrentDate());
+            }
+        }
+        return contentValues;
     }
 
     @Override
@@ -86,11 +109,13 @@ public class MyBaseProvider extends ContentProvider {
         return 0;
     }
 
-    public static Uri buildURI(String authority, String model) {
+    public static Uri buildURI(String authority, String model, boolean multi) {
         Uri.Builder uriBuilder = new Uri.Builder();
         uriBuilder.authority(authority);
         uriBuilder.appendPath(model);
         uriBuilder.appendQueryParameter(KEY_MODEL, model);
+        String type = multi? "multi" : "single";
+        uriBuilder.appendQueryParameter(KEY_TYPE, type);
         uriBuilder.scheme("content");
         return uriBuilder.build();
     }

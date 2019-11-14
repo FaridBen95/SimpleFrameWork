@@ -14,6 +14,9 @@ public class StartActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_start);
         example e = new example(this);
+        Values values = new Values();
+        values.put("lastName", "faridOo");
+        e.insert(values, false);
         e.startTransaction(new DatabaseObserver() {
             @Override
             public boolean onStartedTransaction(SQLiteDatabase db) {
