@@ -17,13 +17,6 @@ public class StartActivity extends AppCompatActivity {
         Values values = new Values();
         values.put("lastName", "faridOo");
         e.insert(values, false);
-        e.startTransaction(new DatabaseObserver() {
-            @Override
-            public boolean onStartedTransaction(SQLiteDatabase db) {
-                db.execSQL("INSERT into example(enabled, removed, lastName) values (1, 1, 'farid')");
-                return true;
-            }
-        });
         e.simpleSelect();
     }
 

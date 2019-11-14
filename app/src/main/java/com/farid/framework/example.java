@@ -12,8 +12,4 @@ public class example extends Model {
         super(mContext, "example");
     }
 
-    @Override
-    public boolean sortableColumns() {
-        return false;
-    }
 }

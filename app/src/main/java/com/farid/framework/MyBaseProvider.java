@@ -88,12 +88,38 @@ public class MyBaseProvider extends ContentProvider {
     }
 
     private ContentValues validateValues(ContentValues values) {
-        ContentValues contentValues = values;
+        ContentValues contentValues = new ContentValues();
+        contentValues.putAll(values);
+        List<String> baseModelsKeys = new ArrayList<>();
+        baseModelsKeys.add(Col.ID);
         if(!model.unAssigneFromModel()){
-            if(!values.containsKey("enabled")){
-                contentValues.put("enabled", true);
-                contentValues.put("removed", false);
-                contentValues.put("write_date", MyUtil.getCurrentDate());
+            baseModelsKeys.add(Col.REMOVED);
+            baseModelsKeys.add(Col.ENABLED);
+            baseModelsKeys.add(Col.WRITE_DATE);
+            if(!values.containsKey(Col.ENABLED)) {
+                contentValues.put(Col.ENABLED, 1);
+            }
+            if(!values.containsKey(Col.REMOVED)) {
+                contentValues.put(Col.REMOVED, 1);
+            }
+            if(!values.containsKey(Col.WRITE_DATE)) {
+                contentValues.put(Col.WRITE_DATE, MyUtil.getCurrentDate());
+            }
+        }
+        for(Col col : model.getColumns()){
+            if(!baseModelsKeys.contains(col.getName()) && !values.containsKey(col.getName())) {
+                Object object = col.getDefaultValue();
+                if (object.getClass().isAssignableFrom(Integer.class)) {
+                    int i = Integer.valueOf(object.toString());
+                    contentValues.put(col.getName(), i);
+                } else if (object.getClass().isAssignableFrom(Boolean.class)) {
+                    int b = object.equals(true) ? 1 : 0;
+                    contentValues.put(col.getName(), b);
+                } else {
+                    contentValues.put(col.getName(), object.toString());
+                }
+            }else{
+                contentValues.remove(Col.ID);
             }
         }
         return contentValues;

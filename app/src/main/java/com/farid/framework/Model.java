@@ -120,11 +120,13 @@ public class Model implements DatabaseListener{
         SQLUtil.startTransaction(getWritableDatabase(), databaseObserver);
     }
 
+    //take effect after creating a table so it will be used after first run or after upgrading database
     @Override
     public boolean unAssigneFromModel() {
         return false;
     }
 
+    //take effect after creating a table so it will be used after first run or after upgrading database
     @Override
     public boolean sortableColumns() {
         return true;
