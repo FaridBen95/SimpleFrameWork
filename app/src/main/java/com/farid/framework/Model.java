@@ -25,6 +25,7 @@ public class Model implements DatabaseListener{
     protected MySqlite sqlite;
     private static String BASE_AUTHORITY = BuildConfig.APPLICATION_ID + ".main_provider";
     private boolean multi;
+    private static TransactionsListener transactionsListener;
 
 
     public String getModelName() {
@@ -150,6 +151,7 @@ public class Model implements DatabaseListener{
     public int update(int row_id, Values values){
         return update(values, Col.ID + " = ? ", new String[]{String.valueOf(row_id)});
     }
+
     private int update(@Nullable Values values, @Nullable String selection, @Nullable String[] selectionArgs){
         assert values != null;
         return mContext.getContentResolver().update(createUri(BASE_AUTHORITY), values.toContentValues(), selection, selectionArgs);
@@ -174,5 +176,13 @@ public class Model implements DatabaseListener{
             }while(cursor.moveToNext());
         }
         return allValues;
+    }
+
+    public void setTransactionsListener(TransactionsListener transactionsListener) {
+        this.transactionsListener = transactionsListener;
+    }
+
+    public TransactionsListener getTransactionsListener() {
+        return transactionsListener;
     }
 }

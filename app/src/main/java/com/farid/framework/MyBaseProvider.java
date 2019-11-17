@@ -19,6 +19,7 @@ public class MyBaseProvider extends ContentProvider {
     private static boolean multi = false;
     private Model model;
     private Context context;
+    private DatabaseListener.TransactionsListener transactionsListener;
 
     public MyBaseProvider(){
         context = getContext();
@@ -67,7 +68,10 @@ public class MyBaseProvider extends ContentProvider {
         String type = uri.getQueryParameter(KEY_TYPE);
         assert type != null;
         multi = type.equals("multi");
-        return App.getModel(context, modelName);
+        Model model = App.getModel(context, modelName);
+        assert model != null;
+        transactionsListener = model.getTransactionsListener();
+        return model;
     }
 
     @Nullable
@@ -83,6 +87,9 @@ public class MyBaseProvider extends ContentProvider {
         model = getModel(uri);
         ContentValues validatedValues = validateValues(values);
         SQLiteDatabase db = model.getWritableDatabase();
+        if(transactionsListener != null){
+            transactionsListener.onPreInsert(new Values().getValuesFrom(validatedValues));
+        }
         long new_id = db.insert(model.getModelName(), null, validatedValues);
         notifyDataChange(uri);
         return Uri.withAppendedPath(uri, new_id + "");
@@ -132,7 +139,20 @@ public class MyBaseProvider extends ContentProvider {
         model = getModel(uri);
         SQLiteDatabase db = model.getWritableDatabase();
         notifyDataChange(uri);
+        if(transactionsListener != null){
+            transactionsListener.onPreDelete(generateSelectionConditions(selection, selectionArgs));
+        }
         return db.delete(model.getModelName(), selection, selectionArgs);
+    }
+
+    private String generateSelectionConditions(String selection, String[] selectionArgs) {
+        String selectionConditions = selection;
+        int i = 0;
+        while (selectionConditions.contains("?")) {
+            selectionConditions = selectionConditions.replaceFirst("\\?", selectionArgs[i]);
+            i++;
+        }
+        return selectionConditions;
     }
 
     @Override
@@ -142,6 +162,9 @@ public class MyBaseProvider extends ContentProvider {
         ContentValues valuesToUpdate = validateValues(values);
         SQLiteDatabase db = model.getWritableDatabase();
         notifyDataChange(uri);
+        if(transactionsListener != null){
+            transactionsListener.onPreUpdate(new Values().getValuesFrom(valuesToUpdate), generateSelectionConditions(selection, selectionArgs));
+        }
         return db.update(model.getModelName(), valuesToUpdate, selection, selectionArgs);
     }
 

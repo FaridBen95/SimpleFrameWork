@@ -3,11 +3,12 @@ package com.farid.framework;
 import android.database.sqlite.SQLiteDatabase;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.ViewTreeObserver;
 import android.widget.HorizontalScrollView;
 import android.widget.ScrollView;
 
-public class StartActivity extends AppCompatActivity {
+public class StartActivity extends AppCompatActivity{
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -21,5 +22,4 @@ public class StartActivity extends AppCompatActivity {
         e.delete("id = ? ", new String[]{"3"});
         e.getRows("id = ? ", new String[]{"4"});
     }
-
 }

@@ -18,4 +18,12 @@ public class Values extends HashMap<String, Object> {
         }
         return contentValues;
     }
+
+    public Values getValuesFrom(ContentValues contentValues){
+        Values values = new Values();
+        for(String key : contentValues.keySet()){
+            values.put(key, contentValues.get(key));
+        }
+        return values;
+    }
 }
