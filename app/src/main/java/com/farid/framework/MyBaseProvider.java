@@ -84,6 +84,7 @@ public class MyBaseProvider extends ContentProvider {
         ContentValues validatedValues = validateValues(values);
         SQLiteDatabase db = model.getWritableDatabase();
         long new_id = db.insert(model.getModelName(), null, validatedValues);
+        notifyDataChange(uri);
         return Uri.withAppendedPath(uri, new_id + "");
     }
 
@@ -127,12 +128,21 @@ public class MyBaseProvider extends ContentProvider {
 
     @Override
     public int delete(@NonNull Uri uri, @Nullable String selection, @Nullable String[] selectionArgs) {
-        return 0;
+        context = getContext();
+        model = getModel(uri);
+        SQLiteDatabase db = model.getWritableDatabase();
+        notifyDataChange(uri);
+        return db.delete(model.getModelName(), selection, selectionArgs);
     }
 
     @Override
     public int update(@NonNull Uri uri, @Nullable ContentValues values, @Nullable String selection, @Nullable String[] selectionArgs) {
-        return 0;
+        context = getContext();
+        model = getModel(uri);
+        ContentValues valuesToUpdate = validateValues(values);
+        SQLiteDatabase db = model.getWritableDatabase();
+        notifyDataChange(uri);
+        return db.update(model.getModelName(), valuesToUpdate, selection, selectionArgs);
     }
 
     public static Uri buildURI(String authority, String model, boolean multi) {
@@ -144,5 +154,13 @@ public class MyBaseProvider extends ContentProvider {
         uriBuilder.appendQueryParameter(KEY_TYPE, type);
         uriBuilder.scheme("content");
         return uriBuilder.build();
+    }
+
+
+    private void notifyDataChange(Uri uri) {
+        // Send broadcast to registered ContentObservers, to refresh UI.
+        Context ctx = getContext();
+        assert ctx != null;
+        ctx.getContentResolver().notifyChange(uri, null);
     }
 }

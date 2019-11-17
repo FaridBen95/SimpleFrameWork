@@ -16,8 +16,10 @@ public class StartActivity extends AppCompatActivity {
         example e = new example(this);
         Values values = new Values();
         values.put("lastName", "faridOo");
-        e.insert(values, false);
-        e.simpleSelect();
+        e.insert(values);
+        values.put("lastName","updated");
+        e.delete("id = ? ", new String[]{"3"});
+        e.getRows("id = ? ", new String[]{"4"});
     }
 
 }

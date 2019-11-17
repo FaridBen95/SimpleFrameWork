@@ -7,6 +7,8 @@ import android.database.DatabaseErrorHandler;
 import android.database.sqlite.SQLiteDatabase;
 import android.net.Uri;
 import android.renderscript.Sampler;
+import android.support.annotation.NonNull;
+import android.support.annotation.Nullable;
 import android.view.Display;
 
 import java.lang.reflect.Field;
@@ -22,6 +24,7 @@ public class Model implements DatabaseListener{
     private String caller;
     protected MySqlite sqlite;
     private static String BASE_AUTHORITY = BuildConfig.APPLICATION_ID + ".main_provider";
+    private boolean multi;
 
 
     public String getModelName() {
@@ -52,10 +55,6 @@ public class Model implements DatabaseListener{
     }
 
     public Uri createUri(String authority){
-        return createUri(authority, false);
-    }
-
-    public Uri createUri(String authority, boolean multi){
         BASE_AUTHORITY = authority;
         String path = getModelName().toLowerCase(Locale.getDefault());
         return MyBaseProvider.buildURI(BASE_AUTHORITY, path, multi);
@@ -132,11 +131,48 @@ public class Model implements DatabaseListener{
         return true;
     }
 
-    public Cursor simpleSelect(){
-        return mContext.getContentResolver().query(createUri(BASE_AUTHORITY), null, "", null, "");
+    public Cursor simpleSelect(String selection, String[] selectionArgs){
+        return simpleSelect(null, selection, selectionArgs, "");
     }
 
-    public void insert(Values values, boolean multi){
-        mContext.getContentResolver().insert(createUri(BASE_AUTHORITY, multi), values.toContentValues());
+    public Cursor simpleSelect(String[] projections, String selection, String[] selectionArgs, String sort){
+        return mContext.getContentResolver().query(createUri(BASE_AUTHORITY), projections, selection, selectionArgs, sort);
+    }
+
+    public int insert(Values values){
+        Uri uri = mContext.getContentResolver().insert(createUri(BASE_AUTHORITY), values.toContentValues());
+        if (uri != null) {
+            return Integer.parseInt(uri.getLastPathSegment());
+        }
+        return -1;
+    }
+
+    public int update(int row_id, Values values){
+        return update(values, Col.ID + " = ? ", new String[]{String.valueOf(row_id)});
+    }
+    private int update(@Nullable Values values, @Nullable String selection, @Nullable String[] selectionArgs){
+        assert values != null;
+        return mContext.getContentResolver().update(createUri(BASE_AUTHORITY), values.toContentValues(), selection, selectionArgs);
+    }
+
+    public int delete(@Nullable String selection, @Nullable String[] selectionArgs){
+        return mContext.getContentResolver().delete(createUri(BASE_AUTHORITY), selection, selectionArgs);
+    }
+
+    //for inserting or updating multi rows at a time this should be called with multi = true and it will automatically desactivate after the transaction
+    public void setMultiTransactions(boolean multi){
+        this.multi = multi;
+    }
+
+    public List<Values> getRows(String selection, String[] selectionArgs){
+        Cursor cursor = simpleSelect(selection, selectionArgs);
+        List<Values> allValues = new ArrayList<>();
+        if(cursor.moveToFirst()){
+            do{
+                Values values = CursorUtils.toValues(cursor);
+                allValues.add(values);
+            }while(cursor.moveToNext());
+        }
+        return allValues;
     }
 }
