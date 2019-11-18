@@ -8,7 +8,7 @@ import android.view.ViewTreeObserver;
 import android.widget.HorizontalScrollView;
 import android.widget.ScrollView;
 
-public class StartActivity extends AppCompatActivity{
+public class StartActivity extends MyAppCompatActivity{
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -21,5 +21,10 @@ public class StartActivity extends AppCompatActivity{
         values.put("lastName","updated");
         e.delete("id = ? ", new String[]{"3"});
         e.getRows("id = ? ", new String[]{"4"});
+    }
+
+    @Override
+    public boolean startTrack() {
+        return true;
     }
 }
