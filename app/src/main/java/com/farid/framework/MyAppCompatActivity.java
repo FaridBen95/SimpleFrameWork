@@ -1,5 +1,6 @@
 package com.farid.framework;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
@@ -16,15 +17,12 @@ import java.util.List;
 public class MyAppCompatActivity extends AppCompatActivity implements ActivityListener, GlobalTouchListener{
     private String info = "No info set for this activity";
     private ActivityListener activityListener;
-    private int activityPosition = 0;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         activityListener = this;
         info = activityListener.setInfo();
-        activityListener.getActivityPosition(activityPosition);
-        activityPosition++;
     }
 
     @Override
@@ -33,7 +31,8 @@ public class MyAppCompatActivity extends AppCompatActivity implements ActivityLi
     }
 
     @Override
-    public void getActivityPosition(int position) {
+    public Class<?> trackActivity() {
+        return MyAppCompatActivity.class;
     }
 
     private View parentView;
@@ -186,11 +185,20 @@ public class MyAppCompatActivity extends AppCompatActivity implements ActivityLi
     protected void onPause() {
         MyUtil.hideKeyboard(this);
         MySharedPreferences mySharedPreferences = new MySharedPreferences(this);
-        mySharedPreferences.putInt("last_activity_index", activityPosition);
+        mySharedPreferences.putString(MySharedPreferences.LAST_ACTIVITY_KEY, activityListener.trackActivity().getName());
         super.onPause();
     }
 
     private void openLastActivity(){
-        int lastActivityPos;
+        MySharedPreferences mySharedPreferences = new MySharedPreferences(this);
+        String lastActivityName = mySharedPreferences.getString(MySharedPreferences.LAST_ACTIVITY_KEY, "");
+        if(!lastActivityName.equals("")){
+            try {
+                Class<?> c = Class.forName(lastActivityName);
+                Intent intent = new Intent(this, c);
+                startActivity(intent);
+            } catch (ClassNotFoundException ignored) {
+            }
+        }
     }
 }

@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <dimen name="activity_vertical_margin">16dp</dimen>
+    <dimen name="activity_horizontal_margin">16dp</dimen>
+
+    <dimen name="default_8dp">8dp</dimen>
+    <dimen name="default_16dp">16dp</dimen>
+    <dimen name="app_bar_top_padding">0dp</dimen>
+
+
+    <!-- Text Sizes -->
+    <dimen name="text_size_xsmall">11sp</dimen>
+    <dimen name="text_size_xxsmall">10sp</dimen>
+    <dimen name="text_size_small">12sp</dimen>
+    <dimen name="text_size_medium">14sp</dimen>
+    <dimen name="text_size_xmedium">16sp</dimen>
+    <dimen name="text_size_large">18sp</dimen>
+    <dimen name="text_size_xlarge">20sp</dimen>
+    <dimen name="text_size_xxlarge">25sp</dimen>
+    <dimen name="text_size_xxxlarge">40sp</dimen>
+
+
+    <!-- Eshop colors -->
+    <dimen name="eshop_tiny_font">10dp</dimen>
+    <dimen name="eshop_small_font">12dp</dimen>
+    <dimen name="eshop_large_font">16dp</dimen>
+</resources>

@@ -11,6 +11,7 @@ import java.util.Set;
 
 public class MySharedPreferences {
     private static final String TAG = MySharedPreferences.class.getSimpleName();
+    public static final String LAST_ACTIVITY_KEY = "last_activity_index";
     private SharedPreferences mPref = null;
 
     public MySharedPreferences(Context context) {
