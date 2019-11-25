@@ -3,6 +3,8 @@ package com.farid.framework;
 import android.app.Application;
 import android.content.Context;
 import android.database.sqlite.SQLiteDatabase;
+import android.net.ConnectivityManager;
+import android.net.NetworkInfo;
 
 import java.lang.reflect.Constructor;
 import java.util.HashMap;
@@ -56,4 +58,20 @@ public class App extends Application {
         return writableDatabase ? sqlites.get(modelName).getWritableDatabase() :
                 sqlites.get(modelName).getReadableDatabase();
     }
+
+    /**
+     * Checks for network availability
+     *
+     * @return true, if network available
+     */
+    public boolean inNetwork() {
+        boolean isConnected = false;
+        ConnectivityManager manager = (ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE);
+        NetworkInfo nInfo = manager.getActiveNetworkInfo();
+        if (nInfo != null && nInfo.isConnectedOrConnecting()) {
+            isConnected = true;
+        }
+        return isConnected;
+    }
+
 }

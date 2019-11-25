@@ -24,6 +24,7 @@ public class StartActivity extends MyAppCompatActivity{
         values.put("lastName","updated");
         e.delete("id = ? ", new String[]{"3"});
         e.getRows("id = ? ", new String[]{"4"});
+        FragmentUtils.get(this, null).startFragment(new FirstFragment(), true, null);
     }
 
     public void setTitleBar() {

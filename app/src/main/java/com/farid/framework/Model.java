@@ -11,7 +11,9 @@ import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.view.Display;
 
+import java.lang.reflect.Constructor;
 import java.lang.reflect.Field;
+import java.lang.reflect.InvocationTargetException;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
@@ -184,5 +186,15 @@ public class Model implements DatabaseListener{
 
     public TransactionsListener getTransactionsListener() {
         return transactionsListener;
+    }
+
+    public Model createInstance(Class<?> classType) {
+        try {
+            Constructor<?> constructor = classType.getConstructor(Context.class);
+            return (Model) constructor.newInstance(mContext);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return null;
     }
 }

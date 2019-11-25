@@ -3,6 +3,7 @@ package com.farid.framework;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
+import android.support.v4.app.Fragment;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 import android.view.ViewGroup;
@@ -200,5 +201,10 @@ public class MyAppCompatActivity extends AppCompatActivity implements ActivityLi
             } catch (ClassNotFoundException ignored) {
             }
         }
+    }
+
+
+    public void loadFragment(Fragment fragment, Boolean addToBackState, Bundle extra) {
+        FragmentUtils.get(this, null).startFragment(fragment, addToBackState, extra);
     }
 }
