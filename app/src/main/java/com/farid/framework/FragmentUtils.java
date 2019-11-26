@@ -46,6 +46,9 @@ public class FragmentUtils {
     }
 
     public void startFragment(Fragment fragment, boolean addToBackState, Bundle extra) {
+        if(MyAppCompatActivity.onChangeView != null){
+            MyAppCompatActivity.onChangeView.openedClass(fragment.getClass());
+        }
         Bundle extra_data = fragment.getArguments();
         if (extra_data == null)
             extra_data = new Bundle();

@@ -18,6 +18,7 @@ import java.util.List;
 public class MyAppCompatActivity extends AppCompatActivity implements ActivityListener, GlobalTouchListener{
     private String info = "No info set for this activity";
     private ActivityListener activityListener;
+    public static OnChangeView onChangeView;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {

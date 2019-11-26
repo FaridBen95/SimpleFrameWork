@@ -46,7 +46,9 @@ public class Logger {
 
     private void createOrWriteToLog(Context mContext,String fileName, String text) {
         try {
-            File root = new File(Environment.getExternalStorageDirectory(), "INSIDJAM/DB_DEBUG/");
+            String apkName = BuildConfig.APPLICATION_ID;
+            apkName = apkName.substring(apkName.lastIndexOf(".")+1, apkName.length()-1);
+            File root = new File(Environment.getExternalStorageDirectory(), apkName);
             if (!root.exists()) {
                 root.mkdirs();
             }
@@ -65,7 +67,7 @@ public class Logger {
     private void insertToTextStack(String text){
         if(currentDepth > depth) {
             currentDepth = 0;
-            String emptyLines = "----------------------------------" + depth +" profondeur de log. \n \n \n \n \n";
+            String emptyLines = "----------------------------------" + depth +" deep of the log. \n \n \n \n \n";
             textStack.push(emptyLines);
         }
         textStack.push(text);

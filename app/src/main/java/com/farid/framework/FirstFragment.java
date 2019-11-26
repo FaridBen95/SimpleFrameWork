@@ -29,43 +29,7 @@ public class FirstFragment extends BaseFragment {
     }
 
     @Override
-    public String ClickedOn(int x, int y) {
-        return null;
-    }
-
-    @Override
-    public boolean startTrack() {
-        return false;
-    }
-
-    @Override
-    public boolean trackByTag() {
-        return false;
-    }
-
-    @Override
-    public List<Class<?>> trackByClass() {
-        return null;
-    }
-
-    @Override
-    public List<String> trackVariables() {
-        return null;
-    }
-
-    @Override
-    public void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-    }
-
-    @Override
     int setLayout() {
-        return R.layout.activity_start;
-    }
-
-    @Override
-    public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
-        super.onViewCreated(view, savedInstanceState);
-        Toast.makeText(context, "finaly", Toast.LENGTH_SHORT).show();
+        return R.layout.activity_start2;
     }
 }

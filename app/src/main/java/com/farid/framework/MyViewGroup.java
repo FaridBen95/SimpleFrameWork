@@ -39,7 +39,7 @@ public class MyViewGroup extends FrameLayout {
             int x = (int) event.getX();
             int y = (int) event.getY();
             String log = null;
-            if(globalTouchListener != null) {
+            if(globalTouchListener != null && globalTouchListener.startTrack()) {
                 log = globalTouchListener.ClickedOn(x, y);
                 Logger logger = new Logger(context);
                 logger.startWriting(log);
