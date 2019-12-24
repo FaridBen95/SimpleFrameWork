@@ -8,7 +8,11 @@ import android.util.Log;
 import android.view.View;
 import android.view.ViewTreeObserver;
 import android.widget.HorizontalScrollView;
+import android.widget.ListView;
 import android.widget.ScrollView;
+
+import java.util.ArrayList;
+import java.util.List;
 
 public class StartActivity extends MyAppCompatActivity{
 
@@ -21,7 +25,6 @@ public class StartActivity extends MyAppCompatActivity{
         Values values = new Values();
         values.put("lastName", "faridOo");
         e.insert(values);
-        values.put("lastName","updated");
         e.delete("id = ? ", new String[]{"3"});
         e.getRows("id = ? ", new String[]{"4"});
         FragmentUtils.get(this, null).startFragment(new FirstFragment(), true, null);

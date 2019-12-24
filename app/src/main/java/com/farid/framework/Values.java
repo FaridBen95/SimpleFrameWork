@@ -26,4 +26,9 @@ public class Values extends HashMap<String, Object> {
         }
         return values;
     }
+
+    public Values addAll(Values values){
+        this.putAll(values);
+        return this;
+    }
 }
