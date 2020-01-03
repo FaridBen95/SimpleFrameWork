@@ -23,6 +23,12 @@ public class CustomListAdapter extends ArrayAdapter<Object>{
     private OnSearchChange mOnSearchChange = null;
     private ListViewGenerator viewGenerator;
     private Activity activity;
+    //this should be used when a value change (for example inside EditText)
+    private FieldValueChangeListener fieldValueChangeListener;
+
+    public void setFieldValueChangeListener(FieldValueChangeListener fieldValueChangeListener) {
+        this.fieldValueChangeListener = fieldValueChangeListener;
+    }
 
     private CustomListAdapter(Context context, int resource, List<Object> objects) {
         super(context, resource, objects);
@@ -149,6 +155,10 @@ public class CustomListAdapter extends ArrayAdapter<Object>{
 
     public interface ListViewGenerator{
         void generateView(View view, int position);
+    }
+
+    public interface FieldValueChangeListener{
+        void onFieldChanged(String key, Object value);
     }
 
 }

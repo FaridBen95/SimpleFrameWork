@@ -10,7 +10,7 @@ import android.widget.Toast;
 import java.util.ArrayList;
 import java.util.List;
 
-public class FirstFragment extends BaseFragment implements CursorListAdapter.OnViewBindListener {
+public class FirstFragment extends BaseFragment{
     @Override
     public Class<example> database() {
         return example.class;
@@ -52,10 +52,5 @@ public class FirstFragment extends BaseFragment implements CursorListAdapter.OnV
         listView.setAdapter(adapter);
         adapter.changeCursor(new example(context).simpleSelect("", null));
         */
-    }
-
-    @Override
-    public void onViewBind(View view, Cursor cursor, Values row) {
-
     }
 }

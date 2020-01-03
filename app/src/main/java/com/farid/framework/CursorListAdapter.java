@@ -57,6 +57,12 @@ public class CursorListAdapter extends CursorAdapter implements
     private HashMap<String, Integer> azIndexers = new HashMap<>();
     private String[] sections = new String[0];
     protected boolean mUseBackgroundSelector = true;
+    //this should be used when a value change (for example inside EditText)
+    private FieldValueChangeListener fieldValueChangeListener;
+
+    public void setFieldValueChangeListener(FieldValueChangeListener fieldValueChangeListener) {
+        this.fieldValueChangeListener = fieldValueChangeListener;
+    }
 
     public CursorListAdapter(Context context, Cursor c, int layout, boolean useBackgroundSelector) {
         super(context, c, false);
@@ -375,5 +381,9 @@ public class CursorListAdapter extends CursorAdapter implements
 
     public interface IOnItemClickListener {
         public void onItemClick(View view, int position);
+    }
+
+    public interface FieldValueChangeListener{
+        void onFieldChanged(String key, Object value);
     }
 }
