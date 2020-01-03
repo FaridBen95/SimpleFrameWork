@@ -3,7 +3,7 @@ package com.farid.framework;
 import java.lang.reflect.Field;
 
 public class Col {
-    public static String ID = "id";
+    public static String ID = "_id";
     public static String WRITE_DATE = "write_date";
     public static String ENABLED = "enabled";
     public static String REMOVED = "removed";

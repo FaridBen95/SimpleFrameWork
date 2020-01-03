@@ -25,8 +25,7 @@ public class StartActivity extends MyAppCompatActivity{
         Values values = new Values();
         values.put("lastName", "faridOo");
         e.insert(values);
-        e.delete("id = ? ", new String[]{"3"});
-        e.getRows("id = ? ", new String[]{"4"});
+        e.getRows("_id = ? ", new String[]{"4"});
         FragmentUtils.get(this, null).startFragment(new FirstFragment(), true, null);
     }
 

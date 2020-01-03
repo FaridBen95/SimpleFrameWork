@@ -1,5 +1,6 @@
 package com.farid.framework;
 
+import android.database.Cursor;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.view.View;
@@ -9,7 +10,7 @@ import android.widget.Toast;
 import java.util.ArrayList;
 import java.util.List;
 
-public class FirstFragment extends BaseFragment {
+public class FirstFragment extends BaseFragment implements CursorListAdapter.OnViewBindListener {
     @Override
     public Class<example> database() {
         return example.class;
@@ -44,14 +45,17 @@ public class FirstFragment extends BaseFragment {
         valuesList.add(values);
         valuesList.add(values);
         valuesList.add(values);
-        valuesList.add(values);
-        CustomListAdapter customListAdapter = new CustomListAdapter(getActivity(), R.layout.example_row, valuesList, new CustomListAdapter.ListViewGenerator() {
-            @Override
-            public void generateView(View view, int position) {
-
-            }
-        });
+        valuesList.add(values);/*
+        CursorListAdapter adapter = new CursorListAdapter(context, null, R.layout.example_row);
+        adapter.setOnViewBindListener(this);
         ListView listView = (ListView)view.findViewById(R.id.fragment_list_view);
-        listView.setAdapter(customListAdapter);
+        listView.setAdapter(adapter);
+        adapter.changeCursor(new example(context).simpleSelect("", null));
+        */
+    }
+
+    @Override
+    public void onViewBind(View view, Cursor cursor, Values row) {
+
     }
 }

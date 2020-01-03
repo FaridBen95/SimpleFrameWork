@@ -34,7 +34,7 @@ public class Model implements DatabaseListener{
         return modelName;
     }
 
-    public Col id = new Col(Col.ColumnType.integer).setAutoIncrement(true).setSequence(-3);
+    public Col _id = new Col(Col.ColumnType.integer).setAutoIncrement(true).setSequence(-3);
     public Col enabled = new Col(Col.ColumnType.bool).setSequence(-2);
     public Col write_date = new Col(Col.ColumnType.text).setSequence(-1);
     public Col removed = new Col(Col.ColumnType.bool).setSequence(0);
@@ -75,7 +75,7 @@ public class Model implements DatabaseListener{
             if(!unassignFromModel) {
                 fields.addAll(Arrays.asList(getClass().getSuperclass().getDeclaredFields()));
             }else{
-                fields.add(getClass().getSuperclass().getField("id"));
+                fields.add(getClass().getSuperclass().getField("_id"));
             }
             fields.addAll(Arrays.asList(getClass().getDeclaredFields()));
             for (Field field : fields) {
