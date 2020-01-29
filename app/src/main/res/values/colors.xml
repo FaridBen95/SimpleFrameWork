@@ -5,4 +5,5 @@
     <color name="colorAccent">#FF4081</color>
 
     <color name="theme_appbar">#560774</color>
+    <color name="drawer_background">#ffffffff</color>
 </resources>
