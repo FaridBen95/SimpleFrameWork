@@ -4,7 +4,9 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
+import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.Toolbar;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.FrameLayout;
@@ -20,10 +22,11 @@ import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 
-public class MyAppCompatActivity extends AppCompatActivity implements ActivityListener, GlobalTouchListener {
+public abstract class MyAppCompatActivity extends AppCompatActivity implements ActivityListener, GlobalTouchListener {
     private String info = "No info set for this activity";
     private ActivityListener activityListener;
     public static OnChangeView onChangeView;
+    protected Toolbar toolbar;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -121,6 +124,11 @@ public class MyAppCompatActivity extends AppCompatActivity implements ActivityLi
     @Override
     public void setContentView(int layoutResID) {
         super.setContentView(layoutResID);
+        toolbar = setToolBar();
+        if(toolbar != null){
+            setSupportActionBar(toolbar);
+        }
+        setTitleBar(getSupportActionBar());
         parentView = findViewById(android.R.id.content);
         View view = parentView;
         setViewsFromXML();
@@ -217,4 +225,10 @@ public class MyAppCompatActivity extends AppCompatActivity implements ActivityLi
     public void loadFragment(Fragment fragment, Boolean addToBackState, Bundle extra) {
         FragmentUtils.get(this, null).startFragment(fragment, addToBackState, extra);
     }
+
+    //to modify anything after the creation of action bar use the method below
+    public abstract void setTitleBar(ActionBar actionBar);
+
+    //set to null in case you want to use the standard action bar
+    public abstract Toolbar setToolBar();
 }

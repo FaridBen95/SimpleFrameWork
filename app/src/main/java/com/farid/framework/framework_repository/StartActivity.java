@@ -2,6 +2,8 @@ package com.farid.framework.framework_repository;
 
 import android.support.v7.app.ActionBar;
 import android.os.Bundle;
+import android.support.v7.widget.Toolbar;
+import android.view.Menu;
 
 import com.farid.framework.project.FirstFragment;
 import com.farid.framework.R;
@@ -19,25 +21,12 @@ public class StartActivity extends MyAppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_start);
-        setTitleBar();
-        example e = new example(this);
-        Values values = new Values();
-        values.put("lastName", "faridOo");
-        e.insert(values);
-        e.getRows("_id = ? ", new String[]{"4"});
-        FragmentUtils.get(this, null).startFragment(new FirstFragment(), true, null);
-    }
-
-    public void setTitleBar() {
-        ActionBar actionBar = getSupportActionBar();
-        if (actionBar != null) {
-            actionBar.setDisplayShowTitleEnabled(true);
-            actionBar.hide();
-        }
+//        setTitleBar();
+//        FragmentUtils.get(this, null).startFragment(new FirstFragment(), true, null);
     }
     @Override
     public boolean startTrack() {
-        return true;
+        return false;
     }
     
     @Override
@@ -50,5 +39,26 @@ public class StartActivity extends MyAppCompatActivity {
         List<String> variableNames = new ArrayList<>();
         variableNames.add("");
         return super.trackVariables();
+    }
+
+    @Override
+    public void setTitleBar(ActionBar actionBar) {
+        if (actionBar != null) {
+            getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+            getSupportActionBar().setDisplayShowHomeEnabled(true);
+            getSupportActionBar().setTitle("");
+        }
+    }
+
+
+    @Override
+    public Toolbar setToolBar() {
+        return (Toolbar) findViewById(R.id.toolbar);
+    }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        getMenuInflater().inflate(R.menu.example_menu, menu);
+        return true;
     }
 }

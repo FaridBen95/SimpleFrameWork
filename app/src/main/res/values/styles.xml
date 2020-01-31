@@ -1,14 +1,39 @@
 <resources>
 
-    <!-- Base application theme. -->
+    <!-- Base application theme. --><!--
     <style name="AppTheme" parent="Theme.AppCompat.Light.DarkActionBar">
-        <!-- Customize your theme here. -->
+        &lt;!&ndash; Customize your theme here. &ndash;&gt;
         <item name="colorPrimary">@color/colorPrimary</item>
         <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
         <item name="colorAccent">@color/colorAccent</item>
     </style>
 
     <style name="AppBar.Dark" parent="ThemeOverlay.AppCompat.Dark.ActionBar">
+    </style>-->
+    <style name="AppTheme.Base" parent="Theme.AppCompat.Light.NoActionBar">
+        <item name="colorPrimary">@color/colorPrimary</item>
+        <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
+        <item name="colorAccent">@color/colorAccent</item>
+
+    </style>
+    <style name="AppBaseTheme" parent="android:Theme.Light">
+        <!--
+            Theme customizations available in newer API levels can go in
+            res/values-vXX/styles.xml, while customizations related to
+            backward-compatibility can go here.
+        -->
     </style>
 
+    <!-- Application theme. -->
+
+    <style name="AppTheme" parent="AppTheme.Base">
+        <!-- Customize your theme here. -->
+    </style>
+
+    <style name="AppBar.Dark" parent="ThemeOverlay.AppCompat.Dark.ActionBar">
+    </style>
+
+    <!-- FIXME: Replace toolbar with appbar.. -->
+    <style name="ToolBarTheme" parent="@style/ThemeOverlay.AppCompat.Dark.ActionBar">
+    </style>
 </resources>

@@ -1,8 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <color name="colorPrimary">#3F51B5</color>
-    <color name="colorPrimaryDark">#303F9F</color>
-    <color name="colorAccent">#FF4081</color>
+    <color name="colorPrimary">@color/theme_primary</color>
+    <color name="colorPrimaryDark">@color/theme_primary_dark</color>
+    <color name="colorAccent">@color/theme_accent</color>
+    <color name="theme_primary">#3EB9C9</color>
+    <color name="theme_primary_dark">#2B9BA8</color>
+    <color name="theme_primary_medium">#B1E2ED</color>
+    <color name="theme_accent">#D48758</color>
 
     <color name="theme_appbar">#560774</color>
     <color name="drawer_background">#ffffffff</color>

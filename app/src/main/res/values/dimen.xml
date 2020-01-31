@@ -24,4 +24,7 @@
     <dimen name="eshop_tiny_font">10dp</dimen>
     <dimen name="eshop_small_font">12dp</dimen>
     <dimen name="eshop_large_font">16dp</dimen>
+
+    <dimen name="statusBarHeight">0dp</dimen>
+
 </resources>
